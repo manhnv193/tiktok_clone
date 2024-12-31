@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-c
 
 function App() {
   const [counter , setCounter] = useState(1);
@@ -13,7 +12,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App" style={{padding: 20}}>
       <h2>{counter}</h2>
       <button onClick={handleIncrease}>Increase</button>
     </div>
