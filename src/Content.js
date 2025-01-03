@@ -1,8 +1,19 @@
-
+import { useEffect, useState } from 'react';
 
 function Content() {
+    const [title, setTitle] = useState('')
+
+    useEffect(() => {
+        console.log('Component mounted')
+    })
+
     return (
-        <h1>Hi anh em</h1>
+        <div>
+            <input
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+            />
+        </div>
     )
 }
 
