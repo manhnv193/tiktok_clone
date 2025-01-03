@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 // - Gọi callback mỗi khi component re-render.
 // - Gọi callback sau khi component thêm element vào DOM. Tức là sau khi input được thêm vào DOM.
 
+// 2. useEffect(callback, [])
+// - Chỉ gọi callback 1 lần sau khi component được mount.
+
 
 
 function Content() {
@@ -15,7 +18,7 @@ function Content() {
         .then(posts => {
             setPosts(posts)
         })
-    })
+    }, [])
 
 
 
