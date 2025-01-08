@@ -11,47 +11,63 @@ import { useEffect, useState } from 'react';
 // - Gọi callback mỗi khi deps thay đổi.
 
 
-const tabs = ['posts', 'comments', 'albums']
-
+const tabs = ['posts', 'comments', 'albums', 'photos', 'todos']
 
 function Content() {
-    const [title, setTitle] = useState('')
-    const [posts, setPosts] = useState([])
     const [type, setType] = useState('posts')
+    const [posts, setPosts] = useState([])
+    const [showGoToTop, setShowGoToTop] = useState(false)
+
+    useEffect(() => {
+        fetch(`https://jsonplaceholder.typicode.com/${type}`)
+            .then(response => response.json())
+            .then(data => {
+                setPosts(data)
+            })
+    }, [type])
 
     useEffect(() => {
 
-        fetch(`https://jsonplaceholder.typicode.com/${type}`)
-            .then(res => res.json())
-            .then(posts => {
-                setPosts(posts)
-            })
-    }, [type])
+        const handleScroll = () => {
+            setShowGoToTop(window.scrollY >=200)
+        }
+
+        window.addEventListener('scroll', handleScroll)
+    }, [])
+
 
 
 
     return (
         <div>
-            {tabs.map(tab => (
-                <button
-                    key={tab}
-                    style={type === tab ? {
-                        color: '#fff',
-                        backgroundColor: '#333'
-                    }: {}}
-                    onClick={() => setType(tab)}>
-                    {tab}
-                </button>
-            ))}
-            <input
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-            />
+            {showGoToTop && 
+            <button
+            style={{
+                position: 'fixed',
+                bottom: 20,
+                right: 20
+            }}>Go To Top</button> }
+            {tabs.map(tab => {
+                return (
+                    <button
+                        key={tab}
+                        style={type === tab ? {
+                            color: '#fff',
+                            backgroundColor: '#333'
+                        } : {}}
+                        onClick={() => setType(tab)}
+                    >
+                        {tab}
+                    </button>
+                )
+            })}
+
             <ul>
-                {posts.map(post => (
-                    <li key={post.id}>{post.title || post.name}</li>
-                ))}
+                {posts.map(post => {
+                    return <li key={post.id}>{post.title || post.name}</li>
+                })}
             </ul>
+            
         </div>
     )
 }
