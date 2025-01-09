@@ -1,4 +1,17 @@
 import { useEffect, useState } from 'react';
+// ===== Kiến thức cần biết =====
+// Side effect: Là những thay đổi mà component thực hiện ra bên ngoài component.
+// Events: Add / remove event listener
+// Observer pattern: Subscribe / unsubscribe
+// Closure: Thay đổi biến bên ngoài component
+// Timers: setTimeout, setInterval, clearTimeout, clearInterval
+// useState
+// Mounted / Unmounted: Thực hiện một số thao tác khi component được mount hoặc unmount.
+// ========
+// Call API
+
+
+// ==== Một số cách sử dụng useEffect ====
 // 1. useEffect(callback)
 // - Gọi callback mỗi khi component re-render.
 // - Gọi callback sau khi component thêm element vào DOM. Tức là sau khi input được thêm vào DOM.
@@ -11,75 +24,30 @@ import { useEffect, useState } from 'react';
 // - Gọi callback mỗi khi deps thay đổi.
 
 // ----------------------------
-// Chung
+// ==== Cách dùng chung cho cả 3 loại trên ====
 // 1. Callback luôn được gọi sau khi component mounted.
 // 2. Cleanup function luôn được gọi trước khi component unmounted.
+// 3. Cleanup function luôn được gọi trước khi callback được gọi (trừ lần mounted).
 
-
-const tabs = ['posts', 'comments', 'albums', 'photos', 'todos']
 
 function Content() {
-    const [type, setType] = useState('posts')
-    const [posts, setPosts] = useState([])
-    const [showGoToTop, setShowGoToTop] = useState(false)
+    const [countDown, setCountDown] = useState(180)
 
-    useEffect(() => {
-        fetch(`https://jsonplaceholder.typicode.com/${type}`)
-            .then(response => response.json())
-            .then(data => {
-                setPosts(data)
-            })
-    }, [type])
+    useEffect( () => {
+        const timerId = setInterval(() => {
+            setCountDown(prev => prev - 1)
+        }, 1000)
 
-    useEffect(() => {
-
-        const handleScroll = () => {
-            setShowGoToTop(window.scrollY >= 200)
-        }
-
-        window.addEventListener('scroll', handleScroll)
-        console.log('add event listener')
 
         return () => {
-            window.removeEventListener('scroll', handleScroll)
-            console.log('remove event listener')
+            clearInterval(timerId)
         }
-    }, [])
 
+    }, [])
 
     return (
         <div>
-            {tabs.map(tab => {
-                return (
-                    <button
-                        key={tab}
-                        style={type === tab ? {
-                            color: '#fff',
-                            backgroundColor: '#333'
-                        } : {}}
-                        onClick={() => setType(tab)}
-                    >
-                        {tab}
-                    </button>
-                )
-            })}
-
-            <ul>
-                {posts.map(post => {
-                    return <li key={post.id}>{post.title || post.name}</li>
-                })}
-            </ul>
-            {showGoToTop &&
-                <button
-                    style={{
-                        position: 'fixed',
-                        bottom: 20,
-                        right: 20
-                    }}
-                >
-                    Go To Top
-                </button>}
-
+            {countDown}
         </div>
     )
 }
