@@ -10,6 +10,11 @@ import { useEffect, useState } from 'react';
 // 3. useEffect(callback, [deps])
 // - Gọi callback mỗi khi deps thay đổi.
 
+// ----------------------------
+// Chung
+// 1. Callback luôn được gọi sau khi component mounted.
+// 2. Cleanup function luôn được gọi trước khi component unmounted.
+
 
 const tabs = ['posts', 'comments', 'albums', 'photos', 'todos']
 
@@ -29,24 +34,21 @@ function Content() {
     useEffect(() => {
 
         const handleScroll = () => {
-            setShowGoToTop(window.scrollY >=200)
+            setShowGoToTop(window.scrollY >= 200)
         }
 
         window.addEventListener('scroll', handleScroll)
+        console.log('add event listener')
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            console.log('remove event listener')
+        }
     }, [])
-
-
 
 
     return (
         <div>
-            {showGoToTop && 
-            <button
-            style={{
-                position: 'fixed',
-                bottom: 20,
-                right: 20
-            }}>Go To Top</button> }
             {tabs.map(tab => {
                 return (
                     <button
@@ -67,7 +69,17 @@ function Content() {
                     return <li key={post.id}>{post.title || post.name}</li>
                 })}
             </ul>
-            
+            {showGoToTop &&
+                <button
+                    style={{
+                        position: 'fixed',
+                        bottom: 20,
+                        right: 20
+                    }}
+                >
+                    Go To Top
+                </button>}
+
         </div>
     )
 }
