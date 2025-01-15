@@ -7,6 +7,23 @@ import reportWebVitals from './reportWebVitals';
 
 console.log(React);
 
+// Fake comments
+function emitComment(id){
+  setInterval(() => {
+    window.dispatchEvent(
+      new CustomEvent(`lession-${id}`, {
+        detail: `Nội dung comment lession ${id}`
+      })
+    )
+  }, 2000)
+}
+
+emitComment(1);
+emitComment(2);
+emitComment(3);
+emitComment(4);
+emitComment(5);
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

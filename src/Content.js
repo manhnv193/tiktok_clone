@@ -29,25 +29,45 @@ import { useEffect, useState } from 'react';
 // 2. Cleanup function luôn được gọi trước khi component unmounted.
 // 3. Cleanup function luôn được gọi trước khi callback được gọi (trừ lần mounted).
 
+const lessions = [
+    { id: 1, name: 'Lession 1' },
+    { id: 2, name: 'Lession 2' },
+    { id: 3, name: 'Lession 3' },
+    { id: 4, name: 'Lession 4' },
+    { id: 5, name: 'Lession 5' },
+]
+
 
 function Content() {
-    const [countDown, setCountDown] = useState(180)
+    const [lessionId, setLessionId] = useState(1);
 
-    useEffect( () => {
-        const timerId = setInterval(() => {
-            setCountDown(prev => prev - 1)
-        }, 1000)
-
-
-        return () => {
-            clearInterval(timerId)
+    useEffect(() => {
+        const handleComment = (event) => {
+            console.log(event.detail);
         }
 
-    }, [])
+        window.addEventListener(`lession-${lessionId}`, handleComment);
+        
+        return () => {
+            window.removeEventListener(`lession-${lessionId}`, handleComment);
+        }
+    }, [lessionId])
 
     return (
         <div>
-            {countDown}
+            <ul>
+                {lessions.map((lession) => (
+                    <li
+                        key={lession.id}
+                        style={{
+                            color: lessionId === lession.id ? 'red' : 'black'
+                        }}
+                        onClick={() => setLessionId(lession.id)}
+                    >
+                        {lession.name}
+                        </li>
+                ))}
+            </ul>
         </div>
     )
 }
