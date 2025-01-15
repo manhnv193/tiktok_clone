@@ -1,48 +1,28 @@
-import { useRef, useState, useEffect } from "react";
+import { useState } from "react";
 import Content from './Content'
 
-// Lưu các giá trị  cảu một tham chiếu bên ngoài
-// function component
+// 1. memo() -> Higher Order Component (HOC)
+// 2. useCallback()
+
+// Hook: gắn vào
+// HOC: bọc bên ngoài
+// Render props: truyền vào
+
+// Tác dụng memo: Tránh re-render component trong trường hợp không cần thiết
 
 
 function App() {
-  const [count, setCount] = useState(60);
-  
+  const [count, setCount] = useState(0);
 
-
-  const timerId = useRef()
-
-  const preCount = useRef()
-
-  const h1Ref = useRef()
-
-  console.log('h1Ref -> ', h1Ref.current)
-  
-  useEffect(() => {
-    preCount.current = count;
-  }, [count])
-
-  const handleStart = () =>{
-    timerId.current = setInterval(() => {
-      setCount(count => count - 1);
-    }, 1000)
-
-    console.log('Start -> ',timerId.current)
+  const handleClick = () => {
+    setCount(count + 1);
   }
-
-  const handleStop = () =>{
-    clearInterval(timerId.current)
-
-    console.log('Stop -> ',timerId.current)
-  }
-
-  console.log('preCount -> ', preCount.current)
 
   return (
     <div style={{ padding: 20 }}>
-      <h1 ref={h1Ref}>{count}</h1>
-      <button onClick={handleStart}>Start</button>
-      <button onClick={handleStop}>Stop</button>
+      <Content count={count}/>
+      <h1>{count}</h1>
+      <button onClick={handleClick}>Click me!</button>
     </div>
   );
 }
