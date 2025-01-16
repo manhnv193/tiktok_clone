@@ -1,20 +1,18 @@
-import Content from './Content'
-import { ThemeContext } from './ThemeContext';
-import { useContext } from 'react';
+import { useContext } from 'react'
+import { StoreContext } from './store'
+
 import './App.css';
 
 
-// Context
-// CompA => CompB => CompC
-
 function App() {
 
-  const context = useContext(ThemeContext);
+  const [state, dispatch] = useContext(StoreContext)
+
+  console.log(state)
 
   return (
       <div style={{ padding: 20 }}>
-        <button onClick={context.toggleTheme}>Toggle theme</button>
-        <Content />
+        Hello AE
       </div>
   )
 }
