@@ -1,57 +1,53 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useReducer } from "react";
 
+// useState
+// 1. Initial state: 0
+// 2. Action: Up (state + 1), Down (state - 1)
+
+
+// useReducer
+// 1. Initial state: 0
+// 2. Action: Up (state + 1), Down (state - 1)
+// 3. Reducer
+// 4. Dispatch: Kích hoạt
+
+
+// Init state
+const initState = 0;
+
+// Actions
+const UP_ACTION = 'up';
+const DOWN_ACTION = 'down';
+
+// Reducer
+const reducer = (state, action) => {
+  console.log('Reducer running')
+  switch (action) {
+    case UP_ACTION:
+      return state + 1;
+    case DOWN_ACTION:
+      return state - 1;
+    default:
+      throw new Error('Invalid action');
+  }
+}
 
 function App() {
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [products, setProducts] = useState([]);
-
-  const handleSubmit = () => {
-    setProducts([...products, { name, price: +price }]);
-    setName('');
-    setPrice('');
-    inputRef.current.focus();
-  }
-
-  const inputRef = useRef(null);
-
-  const total = useMemo(() => {
-    const result = products.reduce((acc, product) => {
-    
-      console.log('Tính toán lại total');
-      
-      return acc + product.price;
-    }, 0)
-
-    return result;
-  }, [products]);
+  const [count, dispatch] = useReducer(reducer, initState);
 
   return (
-    <div style={{ padding: '10px 20px' }}>
-      <input
-        ref={inputRef}
-        type='text'
-        placeholder="Enter name ..."
-        value={name}
-        onChange={(e) => setName(e.target.value)} 
-      />
-      <br />
-      <input
-        type='text'
-        placeholder="Enter price ..."
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-      />
-      <br />
-      <button onClick={handleSubmit}>Submit</button>
-      <br />
-      <h2>Total: {total}</h2>
-      <h2>Products</h2>
-      <ul>
-        {products.map((product, index) => (
-          <li key={index}>{product.name} - {product.price}</li>
-        ))}  
-      </ul> 
+    <div style={{ padding: '0px 20px' }}>
+      <h1>Count: {count}</h1>
+      <button
+        onClick={() => dispatch(UP_ACTION)}
+      >
+        Up
+      </button>
+      <button
+        onClick={() => dispatch(DOWN_ACTION)}
+      >
+        Down
+      </button>
     </div>
   );
 }
