@@ -1,16 +1,12 @@
-import { useLayoutEffect, useEffect, useState, memo } from 'react';
+import Paragraph from './Paragraph';
 
-function Content({ onIncrease }) {
+function Content() {
 
-    console.log('Content render');
     return (
-        <div style={{ marginRight: 10 }}>
-            <>
-                <h1>Hello AE!!</h1>
-                <button onClick={onIncrease}>Click me!</button>
-            </>
+        <div>
+           <Paragraph />
         </div>
     )
 }
 
-export default memo(Content);
+export default Content;
