@@ -1,28 +1,57 @@
-import { useState } from "react";
-import Content from './Content'
-
-// 1. memo() -> Higher Order Component (HOC)
-// 2. useCallback()
-
-// Hook: gắn vào
-// HOC: bọc bên ngoài
-// Render props: truyền vào
-
-// Tác dụng memo: Tránh re-render component trong trường hợp không cần thiết
+import { useState, useMemo, useRef } from "react";
 
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [products, setProducts] = useState([]);
 
-  const handleClick = () => {
-    setCount(count + 1);
+  const handleSubmit = () => {
+    setProducts([...products, { name, price: +price }]);
+    setName('');
+    setPrice('');
+    inputRef.current.focus();
   }
 
+  const inputRef = useRef(null);
+
+  const total = useMemo(() => {
+    const result = products.reduce((acc, product) => {
+    
+      console.log('Tính toán lại total');
+      
+      return acc + product.price;
+    }, 0)
+
+    return result;
+  }, [products]);
+
   return (
-    <div style={{ padding: 20 }}>
-      <Content count={count}/>
-      <h1>{count}</h1>
-      <button onClick={handleClick}>Click me!</button>
+    <div style={{ padding: '10px 20px' }}>
+      <input
+        ref={inputRef}
+        type='text'
+        placeholder="Enter name ..."
+        value={name}
+        onChange={(e) => setName(e.target.value)} 
+      />
+      <br />
+      <input
+        type='text'
+        placeholder="Enter price ..."
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+      />
+      <br />
+      <button onClick={handleSubmit}>Submit</button>
+      <br />
+      <h2>Total: {total}</h2>
+      <h2>Products</h2>
+      <ul>
+        {products.map((product, index) => (
+          <li key={index}>{product.name} - {product.price}</li>
+        ))}  
+      </ul> 
     </div>
   );
 }
