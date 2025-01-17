@@ -1,3 +1,5 @@
+import { SET_TODO_INPUT, ADD_TODO } from "./constants"
+
 const initState = {
     todos: [],
     todoInput: '',
@@ -5,15 +7,18 @@ const initState = {
 
 function reducer(state = initState, action) {
     switch (action.type) {
-        case 'ADD_TODO':
+        case SET_TODO_INPUT:
             return {
                 ...state,
-                todos: state.todos.concat(action.payload),
-                todoInput: '',
+                todoInput: action.payload
             }
-        
+        case ADD_TODO:
+            return {
+                ...state,
+                todos: [...state.todos, action.payload]
+            }
         default:
-            return state
+            throw new Error('Invalid action type')
     }
 }
 
